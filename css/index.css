@@ -1,0 +1,22 @@
+@import url("root.css");
+
+*{
+    font-family: var(--font-family);
+    margin: 0;
+    box-sizing: border-box;
+}
+/* ------------ MODAL ---------------  */
+
+.modal-categorias{
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 20vw;
+    width: 500px;
+}
+
+.mostrar{
+    display: block;
+    visibility: visible;
+}
