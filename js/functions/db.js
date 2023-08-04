@@ -1,3 +1,7 @@
+import UI from "../Class/UI.js";
+
+const ui = new UI();
+
 export function abrirDB(){
     const db = indexedDB.open('todo',1);
 
@@ -30,7 +34,7 @@ export function abrirDB(){
     };
 }
 
-export function insertarDB(data, table){
+export function insertarDB(data, table, seccion){
     const db = indexedDB.open('todo',1);
 
     db.onsuccess = function(){
@@ -42,6 +46,19 @@ export function insertarDB(data, table){
         const request = cat.add(data);
 
         request.onsuccess = function(){
+            const alert = ui.alerta('Agregado correctamente','correct');
+
+            // Insertando mensaje
+            if(seccion == 'categoria'){
+                ui.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
+                ui.limpiarFormCat();
+            }
+
+            setTimeout( () => {
+                alert.remove();
+            }, 2000);
+
+
             console.log('Agregado correctamente');
         }
 
@@ -51,4 +68,21 @@ export function insertarDB(data, table){
     };
 
     
+}
+
+export async function getCategorias(){
+    const db = indexedDB.open('todo',1);
+
+    db.onsuccess = function(){
+        const result = db.result;
+
+        const transaction = result.transaction('Categoria', "readonly");
+        const cat = transaction.objectStore('Categoria');
+
+        const data = cat.getAll();
+
+        data.onsuccess = function(){
+            return data.result;
+        }
+    };
 }
