@@ -1,4 +1,4 @@
-import { validaFormAgregar } from '../functions/categorias.js';
+import { validaFormAgregar, removeCategoria } from '../functions/categorias.js';
 
 class UI {
     viewAgregarCat(){
@@ -65,6 +65,58 @@ class UI {
         return formAgregarCat;
     }
 
+    viewEditarCat(categorias){
+        const table = document.createElement('TABLE');
+
+        // CREANDO THEAD
+        const thead = document.createElement('THEAD');
+        thead.innerHTML = `
+            <tr> 
+                <th scope="col" class="col-md-1">#</th>
+                <th scope="col" class="col-md-9">Categoria</th>
+                <th scope="col" class="col-md-2"></th>
+            </tr>
+        `;
+
+        // CREANDO TBODY
+        const tbody = document.createElement('TBODY');
+        let contador = 1;
+        categorias.forEach(categoria =>{
+            const tr = document.createElement('TR');
+            tr.setAttribute('id',categoria.id_categoria);
+
+            const th = document.createElement('TH');
+            th.textContent = contador;
+            const tdName = document.createElement('TD');
+            tdName.textContent = categoria.name_categoria;
+            const tdButton = document.createElement('TD');
+            const btnEliminar = document.createElement('BUTTON');
+            btnEliminar.setAttribute('type','button');
+            btnEliminar.textContent = 'Borrar';
+            btnEliminar.classList.add('btn','btn-danger');
+
+            // Funcion del boton
+            btnEliminar.addEventListener('click', e =>{
+                const id = Number(e.target.parentElement.parentElement.id);
+                removeCategoria(id);
+            });
+
+            tdButton.appendChild(btnEliminar);
+
+            tr.appendChild(th);
+            tr.appendChild(tdName);
+            tr.appendChild(tdButton);
+
+            tbody.appendChild(tr);
+            contador++;
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+
+        document.querySelector('#containerModal').appendChild(table);
+    }
+
     alerta(msj, tipo){
         const divAlert = document.createElement('DIV');
         divAlert.classList.add('alert');
@@ -89,6 +141,22 @@ class UI {
     limpiarFormCat(){
         const formCategoria = document.querySelector('#form-agregar-cat');
         formCategoria.reset();
+    }
+
+    imprimirCategoriaList(categorias){
+        const div = document.querySelector('#list-categorias');
+        while(div.firstChild){
+            div.removeChild(div.firstChild);
+        }
+
+        categorias.forEach( categoria =>{
+            const btnCategoria = document.createElement('BUTTON');
+            btnCategoria.setAttribute('type','button');
+            btnCategoria.classList.add('list-group-item', 'list-group-item-action');
+            btnCategoria.textContent = categoria.name_categoria;
+
+            div.appendChild(btnCategoria);
+        });
     }
 
 }

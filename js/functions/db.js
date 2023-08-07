@@ -1,6 +1,8 @@
 import UI from "../Class/UI.js";
+import { mostarRemoveCat } from './categorias.js';
 
 const ui = new UI();
+let DB;
 
 export function abrirDB(){
     const db = indexedDB.open('todo',1);
@@ -23,9 +25,8 @@ export function abrirDB(){
 
     // Todo bien
     db.onsuccess = function(){
-        const result = db.result;
-
-        console.log(result);
+        DB = db.result;
+        getCategorias('inicio');
     };
 
     // Si hay un error
@@ -35,54 +36,58 @@ export function abrirDB(){
 }
 
 export function insertarDB(data, table, seccion){
-    const db = indexedDB.open('todo',1);
 
-    db.onsuccess = function(){
-        const result = db.result;
+    const transaction = DB.transaction(table, "readwrite");
+    const cat = transaction.objectStore(table);
 
-        const transaction = result.transaction(table, "readwrite");
-        const cat = transaction.objectStore(table);
+    cat.add(data);
 
-        const request = cat.add(data);
+    transaction.oncomplete = function(){
+        const alert = ui.alerta('Agregado correctamente','correct');
 
-        request.onsuccess = function(){
-            const alert = ui.alerta('Agregado correctamente','correct');
-
-            // Insertando mensaje
-            if(seccion == 'categoria'){
-                ui.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
-                ui.limpiarFormCat();
-            }
-
-            setTimeout( () => {
-                alert.remove();
-            }, 2000);
-
-
-            console.log('Agregado correctamente');
+        // Insertando mensaje
+        if(seccion == 'categoria'){
+            ui.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
+            ui.limpiarFormCat();
         }
 
-        request.onerror = function(){
-            console.log("Error", request.error);
-        }
-    };
+        setTimeout( () => {
+            alert.remove();
+        }, 2000);
 
-    
+
+        console.log('Agregado correctamente');
+    }
+
+    getCategorias('inicio');
 }
 
-export async function getCategorias(){
-    const db = indexedDB.open('todo',1);
+export function getCategorias(seccion){
+    const objectStore = DB.transaction('Categoria').objectStore('Categoria');
 
-    db.onsuccess = function(){
-        const result = db.result;
+    const data = objectStore.getAll();
+    
+    data.onsuccess = function(){
+        const categorias = data.result;
 
-        const transaction = result.transaction('Categoria', "readonly");
-        const cat = transaction.objectStore('Categoria');
-
-        const data = cat.getAll();
-
-        data.onsuccess = function(){
-            return data.result;
+        if(seccion == 'inicio'){
+            ui.imprimirCategoriaList(categorias); 
         }
-    };
+
+        if(seccion == 'modal'){
+            ui.viewEditarCat(categorias);
+        }
+     
+    }
+}
+
+export function removeCat(id){
+    const transaction = DB.transaction('Categoria','readwrite');
+    const objectStore = transaction.objectStore('Categoria');
+
+    objectStore.delete(id);
+
+    transaction.oncomplete = () =>{
+        mostarRemoveCat();
+    }
 }

@@ -1,8 +1,7 @@
 import { 
     mostrarModalCat, 
     mostrarAddCat, 
-    mostarRemoveCat, 
-    mostrarCategorias 
+    mostarRemoveCat 
 } from './functions/categorias.js';
 import { abrirDB } from './functions/db.js';
 
@@ -20,7 +19,6 @@ import { abrirDB } from './functions/db.js';
 
     document.addEventListener('DOMContentLoaded', () =>{
         abrirDB();
-        mostrarCategorias();
     });
 
 })();

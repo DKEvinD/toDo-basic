@@ -1,5 +1,5 @@
 import UI from "../Class/UI.js";
-import { insertarDB, getCategorias } from './db.js';
+import { insertarDB, getCategorias, removeCat } from './db.js';
  
 // Variables 
 const ui = new UI();
@@ -23,15 +23,13 @@ export function mostrarAddCat(){
 }
 
 export function mostarRemoveCat(){
+    limpiarCat();
 
+    // Insertando el HTML generado
+    getCategorias('modal');
+    getCategorias('inicio');
 }
 
-export async function mostrarCategorias(){
-    console.log('Obteniendo CAt');
-
-    const dat = await getCategorias();
-    console.log(dat);
-}
 
 /**
  * FUNCIONES DE ACCION
@@ -59,6 +57,10 @@ export function validaFormAgregar(){
     }
 
     insertarDB(categoria, "Categoria",'categoria');
+}
+
+export function removeCategoria(id){
+    removeCat(id);
 }
 
 // FUNTIONS
