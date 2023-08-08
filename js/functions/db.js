@@ -62,6 +62,31 @@ export function insertarDB(data, table, seccion){
     getCategorias('inicio');
 }
 
+export function editarDB(data, table){
+    const transaction = DB.transaction(table, "readwrite");
+    const cat = transaction.objectStore(table);
+
+    cat.put(data);
+
+    transaction.oncomplete = function(){
+        const alert = ui.alerta('Editado correctamente','correct');
+
+        ui.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
+        ui.limpiarFormCat();
+
+        setTimeout( () => {
+            alert.remove();
+            mostarRemoveCat();
+            
+        }, 2000);
+
+
+        console.log('Editado correctamente');
+    }
+
+    getCategorias('inicio');
+}
+
 export function getCategorias(seccion){
     const objectStore = DB.transaction('Categoria').objectStore('Categoria');
 
@@ -75,7 +100,7 @@ export function getCategorias(seccion){
         }
 
         if(seccion == 'modal'){
-            ui.viewEditarCat(categorias);
+            ui.viewRemoveCat(categorias);
         }
      
     }
@@ -89,5 +114,18 @@ export function removeCat(id){
 
     transaction.oncomplete = () =>{
         mostarRemoveCat();
+    }
+}
+
+export function getOneCategoria(id){
+    const objectStore = DB.transaction('Categoria').objectStore('Categoria');
+
+    const data = objectStore.getAll(id);
+    
+    data.onsuccess = function(){
+        const categorias = data.result;
+
+        ui.viewEditCat(categorias[0]);
+     
     }
 }

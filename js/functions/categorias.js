@@ -1,5 +1,11 @@
 import UI from "../Class/UI.js";
-import { insertarDB, getCategorias, removeCat } from './db.js';
+import { 
+    insertarDB, 
+    getCategorias, 
+    removeCat,
+    getOneCategoria,
+    editarDB
+} from './db.js';
  
 // Variables 
 const ui = new UI();
@@ -30,11 +36,10 @@ export function mostarRemoveCat(){
     getCategorias('inicio');
 }
 
-
 /**
  * FUNCIONES DE ACCION
  */
-export function validaFormAgregar(){
+export function validaFormAgregar(catego){
     const name = document.querySelector('#CAT_Name').value;
     const color = document.querySelector('#CAT_Color').value;
 
@@ -51,20 +56,33 @@ export function validaFormAgregar(){
         return;
     }
 
-    const categoria = {
-        name_categoria: name,
-        color_categoria: color
+    if(catego){
+        const categoria = {
+            name_categoria: name,
+            color_categoria: color,
+            id_categoria: catego.id_categoria
+        }
+        editarDB(categoria,"Categoria");
+    }else{
+        const categoria = {
+            name_categoria: name,
+            color_categoria: color
+        }
+        insertarDB(categoria, "Categoria",'categoria');
     }
-
-    insertarDB(categoria, "Categoria",'categoria');
+    
 }
 
 export function removeCategoria(id){
     removeCat(id);
 }
 
+export function editarCategoria(id){
+    getOneCategoria(id);
+}
+
 // FUNTIONS
-function limpiarCat(){
+export function limpiarCat(){
     while(containerModal.firstChild){
         containerModal.removeChild(containerModal.firstChild);
     }

@@ -1,7 +1,7 @@
 import { 
     mostrarModalCat, 
     mostrarAddCat, 
-    mostarRemoveCat 
+    mostarRemoveCat
 } from './functions/categorias.js';
 import { abrirDB } from './functions/db.js';
 
@@ -11,7 +11,6 @@ import { abrirDB } from './functions/db.js';
     const btnAgregarCat = document.querySelector('#btnAgregarCat');
     const btnEliminarCat = document.querySelector('#btnEliminarCat');
     
-
     // EVENTOS
     btnViewCat.addEventListener('click', mostrarModalCat)
     btnAgregarCat.addEventListener('click', mostrarAddCat);
