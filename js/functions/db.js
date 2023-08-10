@@ -103,6 +103,9 @@ export function getCategorias(seccion){
             ui.viewRemoveCat(categorias);
         }
      
+        if(seccion == 'task'){
+            ui.viewAddTask(categorias);
+        }
     }
 }
 

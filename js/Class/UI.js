@@ -6,6 +6,8 @@ import {
 } from '../functions/categorias.js';
 
 class UI {
+
+    // CATEGORIAS FUNCTION
     viewAgregarCat(){
         const formAgregarCat = document.createElement('FORM');
         formAgregarCat.setAttribute('id', 'form-agregar-cat');
@@ -224,6 +226,117 @@ class UI {
         });
     }
 
+    // TASK FUNCTION
+    viewAddTask(categorias){
+        // Creando FORM
+        const form = document.createElement('FORM');
+
+        // CREANDO DIVS DEL FORM
+        const div1 = document.createElement('DIV');
+        div1.classList.add('mb-3');
+        const div2 = document.createElement('DIV');
+        div2.classList.add('mb-3');
+        const div3 = document.createElement('DIV');
+        div3.classList.add('mb-3');
+        const div4 = document.createElement('DIV');
+        div4.classList.add('mb-3');
+        const div5 = document.createElement('DIV');
+        div5.classList.add('form-check');
+        const div6 = document.createElement('DIV');
+        div6.classList.add('mb-3');
+        
+
+        // CREANDO LABELS DE LOS DIV
+        const lblTittle = document.createElement('LABEL');
+        lblTittle.setAttribute('for','tittle');
+        lblTittle.classList.add('form-label');
+        lblTittle.textContent = 'Titulo';
+        const lblDescripcion = document.createElement('LABEL');
+        lblDescripcion.setAttribute('for','descripcionTask');
+        lblDescripcion.classList.add('form-label');
+        lblDescripcion.textContent = 'Descripcion';
+        const lblCategoria = document.createElement('LABEL');
+        lblCategoria.setAttribute('for','categoriaTask');
+        lblCategoria.classList.add('form-label');
+        lblCategoria.textContent = 'Categoria';
+        const lblFecha = document.createElement('LABEL');
+        lblFecha.setAttribute('for','chkFecha');
+        lblFecha.classList.add('form-check-label');
+        lblFecha.textContent = 'Fecha limite';
+
+        // CREANDO LOS INPUTS DE LOS DIV
+        const inputTittle = document.createElement('INPUT');
+        inputTittle.setAttribute('type','text');
+        inputTittle.setAttribute('name','tittleTask');
+        inputTittle.setAttribute('id','tittleTask');
+        inputTittle.classList.add('form-control');
+        const inputDescripcion = document.createElement('TEXTAREA');
+        inputDescripcion.setAttribute('cols','10');
+        inputDescripcion.setAttribute('rows','2');
+        inputDescripcion.setAttribute('name','descripcionTask');
+        inputDescripcion.setAttribute('id','descripcionTask');
+        inputDescripcion.classList.add('form-control');
+        const chkFecha = document.createElement('INPUT');
+        chkFecha.setAttribute('type','checkbox');
+        chkFecha.setAttribute('name','chkFecha');
+        chkFecha.setAttribute('id','chkFecha');
+        chkFecha.classList.add('form-check-input');
+        const inputFecha = document.createElement('INPUT');
+        inputFecha.setAttribute('type','date');
+        inputFecha.setAttribute('name','fechaTask');
+        inputFecha.setAttribute('id','fechaTask');
+        inputFecha.classList.add('form-control','d-none');
+
+        // CREANDO SELECT
+        const selectCategoria = document.createElement('SELECT');
+        selectCategoria.setAttribute('name','categoriaTask');
+        selectCategoria.setAttribute('id','categoriaTask');
+        selectCategoria.classList.add('form-control');
+        const opcDefault = document.createElement('OPTION');
+        opcDefault.setAttribute('selected','');
+        opcDefault.textContent = 'Selecciona una opcion';
+        selectCategoria.appendChild(opcDefault);
+        categorias.forEach(categoria =>{
+            const { id_categoria, name_categoria} = categoria;
+
+            const opcCategoria = document.createElement('OPTION');
+            opcCategoria.setAttribute('id',id_categoria);
+            opcCategoria.textContent = name_categoria;
+
+            selectCategoria.appendChild(opcCategoria);
+        });
+
+        // ACCIONES
+        chkFecha.addEventListener('change', e =>{
+            if(chkFecha.checked == true){
+                inputFecha.classList.remove('d-none');
+            }else{
+                inputFecha.classList.add('d-none');
+            }
+        });
+        
+        // INSERTANDO EN LOS DIV
+        div5.appendChild(chkFecha);
+        div5.appendChild(lblFecha);
+        div6.appendChild(inputFecha);
+
+        div1.appendChild(lblTittle);
+        div1.appendChild(inputTittle);
+        div2.appendChild(lblDescripcion);
+        div2.appendChild(inputDescripcion);
+        div3.appendChild(lblCategoria);
+        div3.appendChild(selectCategoria);
+        div4.appendChild(div5);
+        div4.appendChild(div6);
+
+        // INSERTANDO EN EL FORM
+        form.appendChild(div1);
+        form.appendChild(div2);
+        form.appendChild(div3);
+        form.appendChild(div4);
+
+        document.querySelector('.container-modal-task').appendChild(form);
+    }
 }
 
 export default UI;

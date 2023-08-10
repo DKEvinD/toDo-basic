@@ -39,7 +39,7 @@
                 <!-- Vista de tareas -->
                 <div class="col-md-9">
                     <!-- Boton para agregar las tareas -->
-                    <button type="button" class="btn btn-primary ml-">Agregar 
+                    <button type="button" class="btn btn-primary" id="btnAddTask">Agregar 
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-plus" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                             <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
@@ -108,7 +108,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-tittle m-auto">Categorias</h5>
-                    <button type="button" class="btn">
+                    <button type="button" class="btn" id="btnSalirModalCat">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                             <path d="M18 6l-12 12" />
@@ -124,6 +124,26 @@
                 </div>
 
                 <div class="container-modal" id="containerModal"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-task">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-tittle">Task</h5>
+                    <button type="button" class="btn btn-close" id="btnSalirModalTask">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body container-modal-task">
+    
+                </div>
             </div>
         </div>
     </div>
