@@ -1,11 +1,13 @@
 import UI from "../Class/UI.js";
+import UITask from "../Class/UI2.js";
 import { mostarRemoveCat } from './categorias.js';
 
-const ui = new UI();
+const uiDb = new UI();
+const uiDB2 = new UITask();
 let DB;
 
 export function abrirDB(){
-    const db = indexedDB.open('todo',1);
+    const db = indexedDB.open('todo',2);
 
     // Si no tiene la DB
     db.onupgradeneeded = function(){
@@ -15,18 +17,25 @@ export function abrirDB(){
 
         // Creando las tablas
         const categorias = res.createObjectStore('Categoria', {keyPath:'id_categoria', autoIncrement: true});
-
+        const task = res.createObjectStore('Tareas', {keyPath:'id_task', autoIncrement: true});
 
         // Definiendo las tablas
         categorias.createIndex('id_categoria', 'id_categoria', {unique: true});
         categorias.createIndex('name_categoria', 'name_categoria', {unique: false});
         categorias.createIndex('color_categoria', 'color_categoria', {unique: false});
+
+        task.createIndex('id_task', 'id_task', {unique: true});
+        task.createIndex('tittle_task', 'tittle_task', {unique: false});
+        task.createIndex('descripcion', 'descripcion', {unique: false});
+        task.createIndex('categoria_task', 'categoria_task', {unique: false});
+        task.createIndex('fechaLimite', 'fechaLimite', {unique: false});
     };
 
     // Todo bien
     db.onsuccess = function(){
         DB = db.result;
         getCategorias('inicio');
+        getTareas('inicio');
     };
 
     // Si hay un error
@@ -43,12 +52,17 @@ export function insertarDB(data, table, seccion){
     cat.add(data);
 
     transaction.oncomplete = function(){
-        const alert = ui.alerta('Agregado correctamente','correct');
+        const alert = uiDb.alerta('Agregado correctamente','correct');
 
         // Insertando mensaje
         if(seccion == 'categoria'){
-            ui.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
-            ui.limpiarFormCat();
+            uiDb.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
+            uiDb.limpiarFormCat();
+        }
+
+        if(seccion == 'tareas'){
+            document.querySelector('#formTask').appendChild(alert);
+            document.querySelector('#formTask').reset();
         }
 
         setTimeout( () => {
@@ -60,6 +74,7 @@ export function insertarDB(data, table, seccion){
     }
 
     getCategorias('inicio');
+    getTareas('inicio');
 }
 
 export function editarDB(data, table){
@@ -69,10 +84,10 @@ export function editarDB(data, table){
     cat.put(data);
 
     transaction.oncomplete = function(){
-        const alert = ui.alerta('Editado correctamente','correct');
+        const alert = uiDb.alerta('Editado correctamente','correct');
 
-        ui.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
-        ui.limpiarFormCat();
+        uiDb.imprimirAlerta('form-agregar-cat',alert,'insertarCat');
+        uiDb.limpiarFormCat();
 
         setTimeout( () => {
             alert.remove();
@@ -96,15 +111,29 @@ export function getCategorias(seccion){
         const categorias = data.result;
 
         if(seccion == 'inicio'){
-            ui.imprimirCategoriaList(categorias); 
+            uiDb.imprimirCategoriaList(categorias); 
         }
 
         if(seccion == 'modal'){
-            ui.viewRemoveCat(categorias);
+            uiDb.viewRemoveCat(categorias);
         }
      
         if(seccion == 'task'){
-            ui.viewAddTask(categorias);
+            uiDB2.viewAddTask(categorias);
+        }
+    }
+}
+
+export function getTareas(seccion){
+    const objectStore = DB.transaction('Tareas').objectStore('Tareas');
+
+    const data = objectStore.getAll();
+    
+    data.onsuccess = function(){
+        const task = data.result;
+
+        if(seccion == 'inicio'){
+            uiDB2.imprimirTaskInicio(task); 
         }
     }
 }
@@ -120,7 +149,7 @@ export function removeCat(id){
     }
 }
 
-export function getOneCategoria(id){
+export function getOneCategoria(id, seccion){
     const objectStore = DB.transaction('Categoria').objectStore('Categoria');
 
     const data = objectStore.getAll(id);
@@ -128,7 +157,13 @@ export function getOneCategoria(id){
     data.onsuccess = function(){
         const categorias = data.result;
 
-        ui.viewEditCat(categorias[0]);
-     
+        if(seccion == 'task'){
+
+            console.log(categorias[0].color_categoria);
+            return;
+        }
+
+        uiDb.viewEditCat(categorias[0]);
+
     }
 }
