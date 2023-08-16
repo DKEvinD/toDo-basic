@@ -149,7 +149,7 @@ export function removeCat(id){
     }
 }
 
-export function getOneCategoria(id, seccion){
+export function getOneCategoria(id, seccion, id_task){
     const objectStore = DB.transaction('Categoria').objectStore('Categoria');
 
     const data = objectStore.getAll(id);
@@ -158,8 +158,7 @@ export function getOneCategoria(id, seccion){
         const categorias = data.result;
 
         if(seccion == 'task'){
-
-            console.log(categorias[0].color_categoria);
+            uiDB2.cambiarColorTd(categorias[0].color_categoria, id_task);
             return;
         }
 

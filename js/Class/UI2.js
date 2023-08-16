@@ -136,10 +136,13 @@ class UITask {
         task.forEach( tarea => {
             const { categoria_task, descripcion, fechaLimite, id_task, tittle_task } = tarea;
             
-            getOneCategoria(Number(categoria_task),'task');
+            if(!isNaN(categoria_task)){
+                getOneCategoria(Number(categoria_task),'task', `tr_${id_task}`);
+            }
+            
             // CREANDO LINE TR
             const tr = document.createElement('TR');
-            tr.setAttribute('id',id_task);
+            tr.setAttribute('id',`tr_${id_task}`);
 
             // CREANDO TD'S
             const tdColor = document.createElement('TD');
@@ -199,8 +202,9 @@ class UITask {
        
     }
 
-    cambiarColorTd(color){
-        console.log(color);
+    cambiarColorTd(color, id_task){
+        const tr = document.querySelector(`#${id_task}`);
+        tr.firstChild.setAttribute('style',`background-color:${color}`);
     }
 }
 
