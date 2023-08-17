@@ -1,6 +1,7 @@
 import UI from "../Class/UI.js";
 import UITask from "../Class/UI2.js";
 import { mostarRemoveCat } from './categorias.js';
+import { mostrarModalTask } from './task.js';
 
 const uiDb = new UI();
 const uiDB2 = new UITask();
@@ -163,6 +164,23 @@ export function getOneCategoria(id, seccion, id_task){
         }
 
         uiDb.viewEditCat(categorias[0]);
+
+    }
+}
+
+export function getOneTask(id, seccion){
+    const objectStore = DB.transaction('Tareas').objectStore('Tareas');
+    const data = objectStore.getAll(id);
+    
+    let categoria;
+    data.onsuccess = function(){
+        const categorias = data.result;
+
+        if(seccion == 'modalTask'){
+            mostrarModalTask();
+            console.log(categorias[0]);
+            return;
+        }
 
     }
 }

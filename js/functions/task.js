@@ -7,7 +7,7 @@ import {
 const uiT = new UI();
 
 // Funciones
-export function mostrarModalTask(tip){
+export function mostrarModalTask(tip,id){
     limpiarModalTask();
     document.querySelector('.modal-task').classList.toggle('mostrar');
 

@@ -1,11 +1,14 @@
-import { getOneCategoria } from '../functions/db.js';
+import { 
+    getOneCategoria,
+    getOneTask
+ } from '../functions/db.js';
 import {
     validarFormTask
 } from '../functions/task.js';
 
 class UITask {
     // TASK FUNCTION
-    viewAddTask(categorias){
+    viewAddTask(categorias, task){
         // Creando FORM
         const form = document.createElement('FORM');
         form.setAttribute('id','formTask');
@@ -163,27 +166,51 @@ class UITask {
                 <p class="descripcion">${descripcion} </p>
             `;
             tdFecha.innerHTML = ` <p> ${fechaLimite} </p>`;
-            tdBtnEditar.innerHTML = `
-                <button type="button" class="btn btn-success">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit-off" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+            const btnEditar = document.createElement('BUTTON');
+            btnEditar.setAttribute('type','button');
+            btnEditar.classList.add('btn','btn-success');
+            btnEditar.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit-off" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                         <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
                         <path d="M10.507 10.498l-1.507 1.502v3h3l1.493 -1.498m2 -2.01l4.89 -4.907a2.1 2.1 0 0 0 -2.97 -2.97l-4.913 4.896" />
                         <path d="M16 5l3 3" />
                         <path d="M3 3l18 18" />
                     </svg>
-                </button>
             `;
-            tdbtnBorrar.innerHTML = `
-                <button type="button" class="btn btn-danger">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-filled" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16z" stroke-width="0" fill="currentColor" />
-                        <path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" stroke-width="0" fill="currentColor" />
-                    </svg>
-                </button>
+            tdBtnEditar.appendChild(btnEditar);
+            
+            const btnBorrar = document.createElement('BUTTON');
+            btnBorrar.setAttribute('type','button');
+            btnBorrar.classList.add('btn','btn-danger');
+            btnBorrar.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-filled" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16z" stroke-width="0" fill="currentColor" />
+                    <path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" stroke-width="0" fill="currentColor" />
+                </svg>
             `;
+            tdbtnBorrar.appendChild(btnBorrar);
 
+
+            // ACCIONES
+            btnEditar.addEventListener('click', e =>{
+                let id;
+                if(e.target.classList.contains('btn')){
+                    id = e.target.parentElement.parentElement;
+                }else if(e.target.classList.contains('icon')){
+                    id = e.target.parentElement.parentElement.parentElement;
+                }else{
+                    id = e.target.parentElement.parentElement.parentElement.parentElement;
+                }
+                id = id.id.split('_',2);
+                
+                getOneTask(Number(id[1]),'modalTask');
+            });
+            btnBorrar.addEventListener('click', () =>{
+                console.log('Borrar');
+            });
 
             // INSERTANDO EN TD
             tdCheck.appendChild(inputChk);
